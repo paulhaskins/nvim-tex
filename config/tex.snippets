@@ -136,8 +136,11 @@ endsnippet
 
 
 
-snippet eq "ref eq" i 
-(\ref{eq:$1}) $0
+snippet eq "ref eq" i
+\begin{gather}
+$1
+\end{gather}
+$0
 endsnippet
 
 
@@ -277,7 +280,7 @@ snip.rv = subprocess.check_output(['wolframscript', '-code', code])
 endsnippet
 
 snippet == "equals" iA
-&= $1 \\\\
+\equiv $1 
 endsnippet
 
 snippet != "equals" iA
@@ -451,6 +454,12 @@ endsnippet
 
 
 context "math()"
+snippet p "d_\mu" w
+\partial$0
+endsnippet
+
+
+context "math()"
 snippet puu "d_\mu" wA
 \partial^{${1:\mu}}$0
 endsnippet
@@ -558,6 +567,10 @@ endsnippet
 
 
 context "math()"
+snippet fa "fancy a" i
+\mathcal{A}
+endsnippet
+context "math()"
 snippet taa "fancy tttt" iA
 \mathcal{T}
 endsnippet
@@ -573,12 +586,6 @@ context "math()"
 snippet jaa "fancy jjjj" iA
 \mathcal{J}
 endsnippet
-
-context "math()"
-snippet faa "fancy ffff" iA
-\mathcal{F}
-endsnippet
-
 context "math()"
 snippet waa "fancy wwww" iA
 \mathcal{W}
@@ -610,7 +617,7 @@ endsnippet
 
 context "math()"
 snippet xii "xi" iA
-x_{i}
+ x_{i}
 endsnippet
 
 context "math()"
@@ -674,8 +681,8 @@ snippet lll "l" iA
 endsnippet
 
 context "math()"
-snippet nabl "nabla" iA
-\nabla 
+snippet gr "nabla" iA
+\vec{\nabla}
 endsnippet
 
 context "math()"
@@ -689,9 +696,20 @@ snippet ** "cdot" iA
 endsnippet
 
 context "math()"
+snippet "(?<=\\$)([a-zA-Z])\\." "Auto \dot{} for math mode" r
+\dot{`!p snip.rv = match.group(1)`}
+endsnippet
+
+context "math()"
 snippet norm "norm" iA
 \|$1\|$0
 endsnippet
+
+context "math()"
+snippet || "evaluated at" iA
+\bigg|_{${1:}}^{${2:}}$0
+endsnippet
+
 
 priority 100
 context "math()"
@@ -966,12 +984,12 @@ endsnippet
 
 context "math()"
 snippet ww "omega" iA
-\omega  
+\omega
 endsnippet
 
 context "math()"
 snippet WW "OMEGA" iA
-\omega  
+\Omega  
 endsnippet
 
 context "math()"
@@ -1121,6 +1139,10 @@ snippet tt "theta" iA
 \theta
 endsnippet
 
+context "math()"
+snippet ta "tau" i
+\tau
+endsnippet
 
 context "math()"
 snippet gg "gamma" iA
@@ -1164,6 +1186,8 @@ snippet itt "bold" i
 \textit{$1} $0
 endsnippet
 
+
+
 ###
 #snippet eqt "equation" 
 #\begin{equation} \label{eq:$1}
@@ -1173,10 +1197,15 @@ endsnippet
 #endsnippet
 ###
 
+#snippet mult "LaTeX gather environment for multiple equations"
+#\\begin{gather}
+#${1:a} = ${2:b}  \\quad ${3:x} = ${4:y} \\quad ${5:m} = ${6:n} 
+#\\end{gather}
+
 snippet eqt "equation" 
 \begin{equation}
-	\refstepcounter{equation} \label{eq:$1}
-	$2
+	\refstepcounter{equation} \label{eq:}
+	$1
 	\tag{\theequation}
 \end{equation}
 $0
@@ -1219,7 +1248,7 @@ endsnippet
 
 context "math()"
 snippet [ "brackets" iA
-\left[$1\right $0
+\left[ $1 \right] $0
 endsnippet
 
 context "math()"
@@ -1234,7 +1263,7 @@ snippet ket "Ket" iA
 endsnippet
 
 context "math()"
-snippet braket "Inner product" iA
+snippet bk "Inner product" iA
 \langle ${1:\psi} | ${2:\phi} \rangle $0
 endsnippet
 
