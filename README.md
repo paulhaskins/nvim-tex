@@ -9,14 +9,14 @@ CTRL N opens Nerdtree buffer
 
 **Copilot Shortcuts**
 "CTRL + l" Completes the suggested paragraph <br>
-"CTRL + k" Completes next suggested word
-"CTRL + q" Completes next suggested line
-"CTRL + ]" Cycles forward through suggestions 
-"CTRL + [" Cycles backwards through suggestions 
-"CTRL + e" dismisses suggestions 
+"CTRL + k" Completes next suggested word <br>
+"CTRL + q" Completes next suggested line <br>
+"CTRL + ]" Cycles forward through suggestions <br>
+"CTRL + [" Cycles backwards through suggestions <br>
+"CTRL + e" dismisses suggestions <br>
 
 **PDF management**
-",c" Runs :VimtexCompile - For continous compiling
+",c" Runs :VimtexCompile - For continous compiling <br>
 
 
 
