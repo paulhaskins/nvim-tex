@@ -8,7 +8,7 @@ https://www.ejmastnak.com/tutorials/vim-latex/vimtex/
 CTRL N opens Nerdtree buffer
 
 **Copilot Shortcuts**
-"CTRL + l" Completes the suggested paragraph <br\>
+"CTRL + l" Completes the suggested paragraph <br>
 "CTRL + k" Completes next suggested word
 "CTRL + q" Completes next suggested line
 "CTRL + ]" Cycles forward through suggestions 
