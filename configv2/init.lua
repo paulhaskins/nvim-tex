@@ -18,6 +18,44 @@ if result == "" then vim.fn.system("pip3 install --user pynvim") end
 
 vim.g.mapleader = ","
 
+vim.g.coc_global_extensions = {
+  "coc-json",
+  "coc-snippets",
+  "coc-flutter",
+  "coc-pyright",
+}
+
+local function coc_python()
+  local is_win = vim.fn.has("win32") == 1
+  local function py_in(dir)
+    return is_win == 1 and (dir .. "\\Scripts\\python.exe") or (dir .. "/bin/python")
+  end
+
+  -- 1) Activated envs
+  local venv = vim.env.VIRTUAL_ENV
+  if venv and venv ~= "" then return py_in(venv) end
+  local conda = vim.env.CONDA_PREFIX
+  if conda and conda ~= "" then return py_in(conda) end
+
+  -- 2) Project-local .venv/venv (walk upward from current file)
+  local roots = vim.fs.find({ ".venv", "venv" }, { upward = true, type = "directory" })
+  if #roots > 0 then return py_in(roots[1]) end
+
+  -- 3) Fallback to PATH
+  local p3 = vim.fn.exepath("python3")
+  if p3 ~= "" then return p3 end
+  return vim.fn.exepath("python")
+end
+
+-- Merge with any existing CoC config you might set elsewhere
+vim.g.coc_user_config = vim.tbl_deep_extend("force", vim.g.coc_user_config or {}, {
+  ["python.pythonPath"] = coc_python(),
+  -- optional helpers if you keep many venvs in one place:
+  -- ["python.venvPath"] = vim.fn.expand("$HOME/.virtualenvs"),
+})
+
+
+
 require("lazy").setup({
     {
         "folke/snacks.nvim",
@@ -345,6 +383,97 @@ require("lazy").setup({
     install = {missing = true}
 })
 
+local function detect_python()
+  -- prefer active venv/conda; fall back to python3/python
+  local is_win = vim.fn.has("win32") == 1
+  local function py_in(dir)
+    return is_win == 1 and (dir .. "\\Scripts\\python.exe")
+                         or (dir .. "/bin/python")
+  end
+  local venv = vim.env.VIRTUAL_ENV
+  if venv and venv ~= "" then return py_in(venv) end
+  local conda = vim.env.CONDA_PREFIX
+  if conda and conda ~= "" then return py_in(conda) end
+  local p3 = vim.fn.exepath("python3")
+  if p3 ~= "" then return p3 end
+  return vim.fn.exepath("python")
+end
+
+ vim.api.nvim_create_user_command("PyRun", function()
+  local file = vim.api.nvim_buf_get_name(0)
+  if file == "" then
+    vim.notify("No file to run", vim.log.levels.WARN)
+    return
+  end
+  vim.cmd.write()
+  local py    = detect_python()
+  local inner = 'clear; "' .. py .. '" ' .. vim.fn.fnameescape(file)  -- what we want to run
+  local cmd   = 'bash -lc ' .. vim.fn.shellescape(inner)               -- run it via bash
+  vim.cmd('TermExec id=1 direction=horizontal size=15 go_back=0 cmd=' .. vim.fn.string(cmd))
+end, { desc = "Run current buffer with Python in bottom console" })
+
+
+
+
+-- Convenient keys
+vim.keymap.set("n", "<F5>", "<cmd>PyRun<CR>", { silent = true, desc = "Run Python file (bottom console)" })
+-- You already have: <space><space> -> open a 15-line terminal; keep it if you like.
+  -- Run with ipython interactively
+  -- ,pi  → run current file in IPython and stay in the bottom console
+ -- ,pi → run current file in IPython (interactive) in a bottom console
+ -- Robust runner using ToggleTerm API (no :TermExec quoting issues)
+local Terminal = require("toggleterm.terminal").Terminal
+local bottom = Terminal:new({ id = 1, direction = "horizontal", size = 15, close_on_exit = false })
+
+local function run_current(use_ipython)
+  -- must be in a real file buffer
+  if vim.bo.buftype ~= "" then
+    vim.notify("Focus a real file buffer first.", vim.log.levels.WARN)
+    return
+  end
+  local file = vim.fn.expand("%:p")
+  if file == "" then
+    vim.notify("Open & save a .py file first.", vim.log.levels.WARN)
+    return
+  end
+  vim.cmd.write()
+  local py = detect_python()
+  local cmd
+  if use_ipython then
+    cmd = 'clear; "' .. py .. '" -m IPython -i ' .. vim.fn.shellescape(file)
+  else
+    cmd = 'clear; "' .. py .. '" ' .. vim.fn.fnameescape(file)
+  end
+  bottom:open()
+  bottom:send(cmd .. "\r")
+end
+
+-- F5: plain Python
+vim.keymap.set("n", "<F5>", function() run_current(false) end, { silent = true, desc = "Run with Python" })
+-- ,pi: IPython -i
+vim.keymap.set("n", "<leader>pi", function() run_current(true) end, { silent = true, desc = "IPython -i current file" })
+
+
+
+
+
+
+
+
+
+
+
+ require("toggleterm").setup({
+  shade_terminals = false,
+  close_on_exit = false,
+  shell = "/bin/bash",   -- add this
+  highlights = {
+    StatusLine = {guifg = "#ffffff", guibg = "#0E1018"},
+    StatusLineNC = {guifg = "#ffffff", guibg = "#0E1018"},
+  },
+})
+
+
 -- global options
 vim.opt.writebackup = false
 vim.opt.conceallevel = 2
@@ -385,7 +514,7 @@ vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 vim.opt.showmode = false
 vim.opt.virtualedit = "all"
-vim.opt.shell = "/opt/homebrew/bin/fish"
+vim.opt.shell = "/bin/bash"
 api.nvim_create_user_command("FixWhitespace", [[%s/\s\+$//e]], {})
 
 -- global funcs
@@ -777,6 +906,13 @@ end
 --npairs.get_rules("`")[1].not_filetypes = {"tex", "latex"}
 --npairs.get_rules("'")[1].not_filetypes = {"tex", "latex", "rust"}
 
+
+
+
+
+
+
+ 
 -- coc settings
 vim.opt.backup = false
 vim.opt.writebackup = false
@@ -923,7 +1059,6 @@ keyset("n", "K", _G.MUtils.help, {silent = true})
 vim.g.vimtex_quickfix_mode = 0
 vim.g.vimtex_compiler_latexmk_engines = {["_"] = "-lualatex -shell-escape"}
 vim.g.vimtex_indent_on_ampersands = 0
-vim.g.vimtex_view_method = "sioyek"
 vim.g.matchup_override_vimtex = 1
 vim.g.vimtex_view_method = "zathura"           -- use zathura
 vim.g.vimtex_view_forward_search_on_start = 1
@@ -1044,14 +1179,7 @@ autocmd("CursorHold", {
     desc = "Highlight symbol under cursor on CursorHold"
 })
 
--- toggleterm
-require("toggleterm").setup({
-    shade_terminals = false,
-    highlights = {
-        StatusLine = {guifg = "#ffffff", guibg = "#0E1018"},
-        StatusLineNC = {guifg = "#ffffff", guibg = "#0E1018"}
-    }
-})
+
 
 -- copilot
 require("copilot").setup({
@@ -1076,9 +1204,9 @@ require("copilot").setup({
         debounce = 75,
         keymap = {
          accept       = "<C-l>",  -- whole suggestion  (from our earlier step)
-      accept_word  = "<C-k>",  -- NEW: one-word-at-a-time
+      accept_word  = "<C-n>",  -- NEW: one-word-at-a-time
       accept_line  = "<C-q>",  -- whole line (keep if you like it)
-      next         = "<C-n>",  -- cycle forward
+      next         = "<C-k>",  -- cycle forward
       prev         = "<C-p>",  -- cycle back
       dismiss      = "<C-e>"
         }
@@ -1124,6 +1252,8 @@ keyset({"n", "x", "o"}, "T", ts_repeat_move.builtin_T_expr, {expr = true})
 
 require("nvim-treesitter.configs").setup({
     highlight = {enable = true, disable = {"latex"}},
+    ensure_installed = { "dart", "lua", "vim", "markdown", "python"},
+    auto_install = true,
     playground = {enable = true, updatetime = 25},
     indent = {enable = true},
     textobjects = {
