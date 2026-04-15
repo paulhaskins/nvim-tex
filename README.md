@@ -19,6 +19,12 @@ CTRL N opens Nerdtree buffer
 ",c" Runs :VimtexCompile - For continous compiling <br>
 
 
+**Setup a new document**
+navigate to the folder and type "latexsetup"
+This runs a command "alias latexsetup='cp -i ~/latex-template/{letterfonts,macros,preamble,template}.tex .'"
+which lies in "~/.bashrc" so navigate to that file to modify it or add new files
+
+
 
 **Copying Inputted files**
 cp ./letterfonts.tex ./macros.tex ./preamble.tex ./template.tex ~/tp/th/s2/2
