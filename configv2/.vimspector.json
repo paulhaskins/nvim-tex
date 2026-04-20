@@ -1,4 +1,4 @@
-{
+   {
   "configurations": {
     "rust - lldb": {
       "adapter": "CodeLLDB",

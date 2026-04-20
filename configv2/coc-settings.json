@@ -1,4 +1,4 @@
-{
+   {
   "suggest.noselect": true,
   "coc.preferences.jumpCommand": "drop",
   "workspace.openResourceCommand": "drop",

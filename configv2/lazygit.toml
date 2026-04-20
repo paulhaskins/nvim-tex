@@ -1,4 +1,4 @@
-os:
+       os:
   editCommand: 'nvim --server $NVIM_SERVER'
   editCommandTemplate: "{{editor}} --remote-send '<C-\\><C-n>:5ToggleTerm<CR>:lua Edit({{filename}}, {{line}})<CR>'"
 git:
