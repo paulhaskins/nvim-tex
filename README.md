@@ -1,6 +1,6 @@
 # nvim-tex
 nvim config for tex & python shortcuts pulled from various sources such as
-https://castel.dev/post/lecture-notes-1/ \n
+https://castel.dev/post/lecture-notes-1/ 
 https://www.ejmastnak.com/tutorials/vim-latex/vimtex/
 
 
@@ -14,6 +14,13 @@ CTRL N opens Nerdtree buffer
 "CTRL + ]" Cycles forward through suggestions <br>
 "CTRL + [" Cycles backwards through suggestions <br>
 "CTRL + e" dismisses suggestions <br>
+
+** .Lua nvim spellchecker for .tex files**
+"]s" next misspelling
+"[s" previous misspelling
+",sa" add word to the dictionary
+",sr" remove word from the dictionary
+",ss" pick the best suggestion 
 
 **PDF management**
 ",c" Runs :VimtexCompile - For continous compiling <br>
