@@ -12,9 +12,10 @@ def env(name):
 endglobal
 
 snippet def "definition" 
-\dfn{$1 :}{
+\dfn{\textbf{$1 :}}{
 $2
 }
+\\
 $0
 endsnippet
 
@@ -24,14 +25,22 @@ snippet thm "theorem" A
 {
 $2
 }
+\\
 $0
 endsnippet
 
-
+snippet prp "proposition" A
+\mprop{$1}{
+$2
+}
+\\
+$0
+endsnippet
 
 snippet lem "lemma" A
 \mlem{$1}{
-$2}
+$2
+}\\
 $0
 endsnippet
 
@@ -44,7 +53,9 @@ $0
 endsnippet
 
 snippet nt "note" A
-\nt{$1}
+\nt{
+$1
+}
 $0
 endsnippet
 
@@ -70,7 +81,9 @@ $0
 endsnippet
 
 
-
+snippet wrt "with respect to" iA
+with respect to 
+endsnippet
 
 
 snippet mull "side by side equations" i
@@ -121,7 +134,7 @@ endsnippet
 
 
 
-snippet il "Roman numeral list (i), (ii), ..." b
+snippet il "Roman numeral list (i), (ii), ..." 
 \begin{enumerate}[label=(\roman*)]
   \item $1
   \item $2
@@ -142,18 +155,24 @@ snippet al "latin list" b
   $0
 endsnippet
 
+snippet nl "numbered list" b
+\begin{enumerate}[label=(\arabic*).]  
+  \item $1
+  \item $2
+\end{enumerate}
+$0
+endsnippet
 
 
 
 
 
-
-snippet sub "subsection" A
+snippet sub "subsection" i
 \subsection{$1}
 	$0
 endsnippet
 
-snippet sec "section" A
+snippet sec "section" i
 \section{$1}
 	$0
 endsnippet
@@ -223,7 +242,7 @@ endsnippet
 priority 100
 context "math()"
 snippet ve "arrow" iA
-\vec{$1} $0
+\vec{ $1} $0
 endsnippet
 
 #snippet /(\S+)v/ "Convert variable to vector" r
@@ -377,15 +396,23 @@ snippet ali "Align" bA
 .\end{align*}
 endsnippet
 
-
+         
+snippet lal "Align" bA
+\begin{lalign*}
+	${1:${VISUAL}} \\
+	${2:${VISUAL}}
+.\end{lalign*}
+$0
+endsnippet
+         
 context "math()"
-snippet qq "qquad" ia
+snippet qq "qquad" iA
 \qquad $0
 endsnippet
 
 context "math()"
 snippet // "Fraction" iA
-\\frac{$1}{$2}$0
+\\frac{ $1  }{ $2 }$0
 endsnippet
 
 context "math()"
@@ -394,7 +421,7 @@ snippet dot "dot" iA
 endsnippet
 
 snippet / "Fraction" i
-\\frac{${VISUAL}}{$1}$0
+\\frac{ ${VISUAL} }{ $1 }$0
 endsnippet
 
 context "math()"
@@ -503,13 +530,18 @@ endsnippet
 
 context "math()"
 snippet det "determinant" iA
-\text{det } $0
+\text{ det } $0
 endsnippet
 
-
+         
+context "math()"
+snippet adj "adjoint" iA
+\text{ adj } $0
+endsnippet
+         
 context "math()"
 snippet sgn "sign" iA
-\text{sgn } $0
+\text{ sgn } $0
 endsnippet
 
 
@@ -522,20 +554,73 @@ snippet id "23 matrix" iA
     0 & 0 & 0 & \dots  & 1\end{bmatrix}
 endsnippet
 
+context "math()"
+snippet mat "generic matrix" iA
+\begin{bmatrix}
+     a_{11} & a_{12} & a_{ 1 3} & \dots  & a_{1n} \\\
+     a_{21} & a_{ 2 2} & a_{ 2 3} & \dots  & a_{2n} \\\
+     \vdots & \vdots & \vdots & \ddots & \vdots \\\
+     a_{ m 1} & a_{m 2} & a_{ m 3} & \dots  & a_{mn}
+\end{bmatrix} 
+$0 
+endsnippet
+ 
+context "math()"
+snippet mut "23 matrix" iA
+\begin{bmatrix}
+		a_{11} & a_{12} & a_{13} & \dots  & a_{1n} \\
+	0 & a_{22} & a_{23} & \dots  & a_{2n} \\
+	\vdots & \vdots & \vdots & \ddots & \vdots \\
+	0 & 0 & 0 & \dots  & a_{ nn}\end{bmatrix}      
+endsnippet
+         
+           
+context "math()"
+snippet 16m "23 matrix" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6 \\\
+\end{bmatrix}
+$0
+endsnippet 
+
+                            
+context "math()"
+snippet 15m "23 matrix" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 \\\
+\end{bmatrix}
+$0
+endsnippet                  
+
+                             
+context "math()"
+snippet 14m "23 matrix" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 \\\
+\end{bmatrix}
+$0
+endsnippet        
 
 
-
+ 
+                             
+context "math()"
+snippet 13m "23 matrix" iA
+\begin{bmatrix}
+$1 & $2 & $3  \\\
+\end{bmatrix}
+$0
+endsnippet        
+         
 context "math()"
 snippet 12m "23 matrix" iA
 \begin{bmatrix}
 $1 & $2\\\
 \end{bmatrix}
 $0
-
-
 endsnippet
 
-
+           
 context "math()"
 snippet 21m "23 matrix" iA
 \begin{bmatrix}
@@ -543,8 +628,70 @@ $1\\\
 $2\\\
 \end{bmatrix}
 
+endsnippet 
+
+
+context "math()"
+snippet 31m "23 matrix" iA
+\begin{bmatrix}
+$1\\\
+$2\\\
+$3\\\
+\end{bmatrix}
+ $0
+endsnippet
+            
+context "math()"
+snippet 41m "23 matrix" iA
+\begin{bmatrix}
+$1\\\
+$2\\\
+$3\\\
+$4\\\
+\end{bmatrix}
+ $0
+endsnippet  
+      
+
+       
+            
+context "math()"
+snippet 35m "23 matrix" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5\\\
+$6 & $7 & $8 & $9 & $10\\\
+$11 & $12 & $13 & $14 & $15\\\
+\end{bmatrix}
+ $0
 endsnippet
 
+context "math()"
+snippet 51m "23 matrix" iA
+\begin{bmatrix}
+$1\\\
+$2\\\
+$3\\\
+$4\\\
+$5\\\
+\end{bmatrix}
+ $0
+endsnippet 
+
+         
+context "math()"
+snippet 61m "23 matrix" iA
+\begin{bmatrix}
+$1\\\
+$2\\\
+$3\\\
+$4\\\
+$5\\\
+$6\\\
+\end{bmatrix}
+ $0
+endsnippet 
+
+         
 context "math()"
 snippet 23m "23 matrix" iA
 \begin{bmatrix}
@@ -569,6 +716,132 @@ $4 & $5 & $6\\\
 $7 & $8 & $9\\\
 \end{bmatrix}
 endsnippet
+ 
+
+  
+context "math()"
+snippet 34m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4\\\
+$5 & $6 & $7 & $8\\\
+$9 & $10 & $11 & $12\\\
+\end{bmatrix}
+endsnippet
+         
+
+
+context "math()"
+snippet 32m "s" iA
+\begin{bmatrix}
+$1 & $2 \\\
+$3 & $4 \\\
+$5 & $6 \\\
+\end{bmatrix}
+endsnippet
+
+ 
+ 
+context "math()"
+snippet 64m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4\\\
+$5 & $6 & $7 & $8\\\
+$9 & $10 & $11 & $12\\\
+$13 & $14 & $15 & $16\\\
+$17 & $18 & $19 & $20\\\
+$21 & $22 & $23 & $24\\\
+\end{bmatrix}
+endsnippet
+         
+                                 
+context "math()"
+snippet 36m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6\\\
+$7 & $8 & $9 & $10 & $11 & $12\\\
+$13 & $14 & $15 & $16 & $17 & $18\\\
+\end{bmatrix}
+endsnippet                       
+ 
+context "math()"
+snippet 46m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6\\\
+$7 & $8 & $9 & $10 & $11 & $12\\\
+$13 & $14 & $15 & $16 & $17 & $18\\\
+$19 & $20 & $21 & $22 & $23 & $24\\\
+\end{bmatrix}
+endsnippet    
+
+           
+context "math()"
+snippet 65m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5\\\
+$6 & $7 & $8 & $9 & $10\\\
+$11 & $12 & $13 & $14 & $15\\\
+$16 & $17 & $18 & $19 & $20\\\
+$21 & $22 & $23 & $24 & $25\\\
+$26 & $27 & $28 & $29 & $30\\\
+\end{bmatrix}
+endsnippet                       
+
+
+
+ 
+context "math()"
+snippet 77m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6 & $7 \\\
+$8 & $9 & $10 $11 & $12 & $13 & $14 \\\
+$15 & $16 & $17 & $18 & $19 & $20 & $21 \\\
+$22 & $23 & $24 & $25 & $26 & $27 & $28 \\\
+$29 & $30 & $31 & $32 & $33 & $34 & $35 \\\
+$36 & $37 & $38 & $39 & $40 & $41 & $42 \\\
+$43 & $44 & $45 & $46 & $47 & $48 & $49 \\\
+\end{bmatrix}
+endsnippet                       
+         
+ 
+context "math()"
+snippet 88m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6 & $7 & $8 \\\
+$9 & $10 $11 & $12 & $13 & $14 & $15 & $16 \\\
+$17 & $18 & $19 & $20 & $21 & $22 & $23 & $24 \\\
+$25 & $26 & $27 & $28 & $29 & $30 & $31 & $32 \\\
+$33 & $34 & $35 & $36 & $37 & $38 & $39 & $40 \\\
+$41 & $42 & $43 & $44 & $45 & $46 & $47 & $48 \\\
+$49 & $50 & $51 & $52 & $53 & $54 & $55 & $56 \\\
+$57 & $58 & $59 & $60 & $61 & $62 & $63 & $64 \\\
+\end{bmatrix}
+endsnippet                       
+         
+
+ 
+context "math()"
+snippet 56m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6\\\
+$7 & $8 & $9 & $10 & $11 & $12\\\
+$13 & $14 & $15 & $16 & $17 & $18\\\
+$19 & $20 & $21 & $22 & $23 & $24\\\
+$25 & $26 & $27 & $28 & $29 & $30\\\
+\end{bmatrix}
+endsnippet                       
+
+ 
+context "math()"
+snippet 66m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5 & $6\\\
+$7 & $8 & $9 & $10 & $11 & $12\\\
+$13 & $14 & $15 & $16 & $17 & $18\\\
+$19 & $20 & $21 & $22 & $23 & $24\\\
+$25 & $26 & $27 & $28 & $29 & $30\\\
+$31 & $32 & $33 & $34 & $35 & $36\\\
+\end{bmatrix}
+endsnippet                             
 
 
 context "math()"
@@ -580,8 +853,29 @@ $9 & $10 & $11 & $12\\\
 $13 & $14 & $15 & $16\\\
 \end{bmatrix}
 endsnippet
-
-
+         
+context "math()"
+snippet 55m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 & $4 & $5\\\
+$6 & $7 & $8 & $9 & $10\\\
+$11 & $12 & $13 & $14 & $15\\\
+$16 & $17 & $18 & $19 & $20\\\
+$21 & $22 & $23 & $24 & $25\\\
+\end{bmatrix}
+endsnippet
+         
+         
+context "math()"
+snippet 43m "s" iA
+\begin{bmatrix}
+$1 & $2 & $3 \\\
+$4 & $5 & $6 \\\
+$7 & $8 & $9 \\\
+$10 & $11 & $12 \\\
+\end{bmatrix}
+endsnippet
+         
 
 context "math()"
 snippet 22m "23 matrix" iA
@@ -625,6 +919,17 @@ snippet 34lm "34 dashed matrix" iA
 endsnippet
 
 context "math()"
+snippet 36lm "5 | 1 dashed matrix (18 entries)" iA
+\left[
+\begin{array}{ccccc;{2pt/2pt}c}
+  $1  & $2  & $3  & $4  & $5  & $6\\\
+  $7  & $8  & $9  & $10 & $11 & $12\\\
+  $13 & $14 & $15 & $16 & $17 & $18\\\
+\end{array}
+\right]
+endsnippet
+
+context "math()"
 snippet 43lm "34 dashed matrix" iA
 \left[
 \begin{array}{ccc;{2pt/2pt}c}  
@@ -636,6 +941,12 @@ snippet 43lm "34 dashed matrix" iA
 \right]
 endsnippet
 
+
+
+
+
+ t
+         
 
 
 context "math()"
@@ -650,7 +961,19 @@ snippet 44lm "44 dashed matrix" iA
 \right]
 endsnippet
 
-
+           
+context "math()"
+snippet 45lm "44 dashed matrix" iA
+\left[
+\begin{array}{cccc;{2pt/2pt}c}  
+  $1 & $2 & $3 & $4 & $5\\\
+  $6 & $7 & $8 & $9 & $10\\\
+  $11 & $12 & $13 & $14 & $15\\\
+  $16 & $17 & $18 & $19 & $20\\\
+\end{array}
+\right]
+endsnippet
+           
 
 
 context "math()"
@@ -701,9 +1024,16 @@ snippet sum "Summation" iA
 $0
 endsnippet
 
-
-
-
+context "math()"
+snippet CS "direct sum" i
+\bigoplus_{${1:i \in ${2:I}}} $3
+endsnippet
+          
+context "math()"
+snippet cs "direct sum" i
+\oplus_{${1:i \in ${2:I}}} $3
+endsnippet
+          
 
 context "math()"
 snippet taylor "taylor" w
@@ -740,7 +1070,7 @@ endsnippet
 
 
 context "math()"
-snippet d "d/dx" iw
+snippet de "d/dx" iw
 \frac{\partial ${1:f}}{\partial ${2:x}} $0
 endsnippet
 
@@ -802,11 +1132,21 @@ endsnippet
 
 context "math()"
 snippet td "to the ... power" iA
-^{$1}$0
+^{ $1 }$0
+endsnippet
+
+context "math()"
+snippet bm "bold matrix (mathbf)" w
+\mathbf{${1:A}} $0
+endsnippet
+
+context "math()"
+snippet da i 
+\dagger $0
 endsnippet
 
 snippet __ "subscript" iA
-_{$1}$0
+_{ $1 }$0
 endsnippet
 
 snippet ooo "\infty" iA
@@ -841,11 +1181,64 @@ snippet laa "fancy lllll" iA
 endsnippet
 
 context "math()"
+snippet uaa "fancy lllll" iA
+\mathcal{U}
+endsnippet 
+
+ 
+context "math()"
+snippet kaa "fancy lllll" iA
+\mathcal{K}
+endsnippet 
+
+
+           
+context "math()"
+snippet Aaa "fancy lllll" iA
+\mathcal{A}
+endsnippet 
+ 
+context "math()"
+snippet maa "fancy lllll" iA
+\mathcal{M}
+endsnippet 
+context "math()"
+snippet daa "fancy lllll" iA
+\mathcal{D}
+endsnippet 
+ 
+context "math()"
+snippet Raa "fancy lllll" iA
+\mathcal{R}
+endsnippet 
+ 
+context "math()"
+snippet lss "fancy lllll" iA
+\mathscr{L}
+endsnippet
+      
+context "math()"
+snippet hss "fancy lllll" iA
+\mathscr{H}
+endsnippet
+         
+context "math()"
+snippet pss "fancy lllll" iA
+\mathscr{P}
+endsnippet
+         
+
+context "math()"
 snippet qaa "fancy lllll" iA
 \mathcal{Q}
 endsnippet
 
-
+  
+context "math()"
+snippet naa "fancy lllll" iA
+\mathcal{N}
+endsnippet
+  
 
 context "math()"
 snippet iaa "fancy lllll" iA
@@ -864,6 +1257,17 @@ snippet faa "fancy ffff" iA
 \mathcal{F}
 endsnippet
 
+         
+context "math()"
+snippet gaa "fancy ffff" iA
+\mathcal{G}
+endsnippet 
+         
+ 
+context "math()"
+snippet caa "fancy ffff" iA
+\mathcal{C}
+endsnippet 
 
 context "math()"
 snippet fa "fancy a" i
@@ -885,6 +1289,11 @@ snippet zaa "fancy zzzz" iA
 \mathcal{Z}
 endsnippet
 
+context "math()"
+snippet vaa "fancy lllll" iA
+\mathcal{V}
+endsnippet 
+ 
 
 context "math()"
 snippet jaa "fancy jjjj" iA
@@ -894,13 +1303,27 @@ context "math()"
 snippet waa "fancy wwww" iA
 \mathcal{W}
 endsnippet
+         
+context "math()"
+snippet oaa "fancy pppp" iA
+\mathcal{O}
+endsnippet
 
 context "math()"
 snippet paa "fancy pppp" iA
 \mathcal{P}
 endsnippet
-
-
+           
+context "math()"
+snippet eaa "fancy pppp" iA
+\mathcal{E}
+endsnippet 
+  
+context "math()"
+snippet baa "fancy pppp" iA
+\mathcal{B}
+endsnippet
+  
 context "math()"
 snippet ch "chi" iA
 \chi 
@@ -979,7 +1402,7 @@ snippet mcal "mathcal" iA
 \mathcal{$1}$0
 endsnippet
 
-snippet lll "l" iA
+snippet Ll "l" iA
 \ell
 endsnippet
 
@@ -1018,6 +1441,23 @@ priority 100
 context "math()"
 snippet '(?<!\\)(sin|cos|arccot|cot|csc|ln|log|exp|star|perp)' "ln" rwA
 \\`!p snip.rv = match.group(1)`
+endsnippet
+
+context "math()"
+snippet ch "cosh" i 
+\cosh $0 
+endsnippet
+
+ 
+context "math()"
+snippet Ph "cosh" iA 
+\Phi $0 
+endsnippet
+
+ 
+context "math()"
+snippet Ps "cosh" i 
+\Psi$0 
 endsnippet
 
 priority 300
@@ -1133,8 +1573,8 @@ snippet ceq "subset" Ai
 endsnippet
 
 context "math()"
-snippet notin "not in " iA
-\not\in 
+snippet nel "not in " iA
+\notin 
 endsnippet
 
 context "math()"
@@ -1266,7 +1706,7 @@ endsnippet
 priority 100
 context "math()"
 snippet "([a-zA-Z])~" "hat" riA
-\tilde{`!p snip.rv=match.group(1)`}
+\tilde{ `!p snip.rv=match.group(1)` $1}   $0
 endsnippet
 
 
@@ -1283,8 +1723,8 @@ endsnippet
 
 
 context "math()"
-snippet [] "H" iA
-\left[$1\right]$0
+snippet co "H" iA
+\left[ $1 \right]$0
 endsnippet
 
 
@@ -1293,16 +1733,26 @@ snippet HH "H" iA
 \mathbb{H}
 endsnippet
 
+context "math()"
+snippet dia "Diagonal" i 
+\begin{bmatrix}
+		$1 & 0 & \dots & 0 \\\
+		0 & $2 & \dots & 0 \\\
+		\vdots & \vdots & \ddots & \vdots \\\
+		0 & 0 & \dots & $3
+\end{bmatrix}
+$0
+endsnippet
 
 context "math()"
-snippet dia "Diagponal" iA
+snippet diag "Diagponal" i
 \mathbb{D}
 endsnippet
 
 
 context "math()"
 snippet ee "epsilon" iA
-\epsilon
+\varepsilon
 endsnippet
 
 
@@ -1315,6 +1765,13 @@ context "math()"
 snippet pp "rho" iA
 \rho  
 endsnippet
+
+
+ 
+context "math()"
+snippet kk "kappa" iA
+\kappa  
+endsnippet   
 
 context "math()"
 snippet ww "omega" iA
@@ -1357,11 +1814,18 @@ snippet vtt "vartheta" iA
 \vartheta
 endsnippet
 
-
+ 
+context "math()"
+snippet SS "sigma" iA
+\Sigma
+endsnippet
+ 
 context "math()"
 snippet ss "sigma" iA
 \sigma
 endsnippet
+
+
 
 
 
@@ -1454,6 +1918,13 @@ context "math()"
 snippet ll "lamda" iA
 \lambda
 endsnippet
+ 
+
+context "math()"
+snippet el "lamda" iA
+\ell $0
+endsnippet
+
 
 
 context "math()"
@@ -1464,17 +1935,31 @@ endsnippet
 
 context "math()"
 snippet bb	 "beta" iA
-\beta
+\beta $0
 endsnippet
 
 context "math()"
-snippet nn "theta" iA
+snippet nn "theta" i
 \eta
 endsnippet
 
 context "math()"
+snippet nn_ "theta" iA
+\eta _{ ${1:} }$0
+endsnippet
+ 
+context "math()"
+snippet gt "theta" iA
+g^{ ${1:} }$0
+endsnippet
+
+ 
+ 
+
+ 
+context "math()"
 snippet tt "theta" iA
-\theta
+\theta $0
 endsnippet
 
 context "math()"
@@ -1528,14 +2013,24 @@ snippet ul "underline" i
 \underline{$1} $0
 endsnippet
 
+
+context "math()"
+snippet und  "underbrace"  iA
+\underbrace{ $1 }_{ $2 }$0
+endsnippet
+
+
+snippet eqt "equation" 
+\begin{equation} \label{eq:$1}
+	$2
+\end{equation}
+$0
+endsnippet
 ###
-#snippet eqt "equation" 
-#\begin{equation} \label{eq:$1}
-#	$2
-#\end{equation}
-#$0
-#endsnippet
-###
+
+snippet eqr "reference equation"
+\eqref{eq:$1} $0
+endsnippet
 
 #snippet mult "LaTeX gather environment for multiple equations"
 #\\begin{gather}
@@ -1574,25 +2069,25 @@ endsnippet
 
 
 context "math()"
-snippet cho "choose" iA
+snippet tak "choose" i
 \binom{$1}{$2}$0
 endsnippet
 
 
 context "math()"
-snippet {{ "brackets" iA
-\\{ $1 \\} $0
+snippet { "brackets" iA
+\\left\\{ $1 \\right\\} $0
 endsnippet
 
 
 context "math()"
 snippet [ "brackets" iA
-\left[ $1 \right] $0
+\\left[ $1 \\right] $0
 endsnippet
 
 context "math()"
 snippet bra "Bra" iA
-\langle ${1:\psi} | $0
+\left\langle ${1:\psi} \right| $0
 endsnippet
 
 
@@ -1603,7 +2098,7 @@ endsnippet
 
 context "math()"
 snippet bk "Inner product" iA
-\langle $1  \rangle $0
+\left\langle $1  \right\rangle $0
 endsnippet
 
 context "math()"
@@ -1619,7 +2114,7 @@ endsnippet
 
 context "math()"
 snippet ke "ke" iA
-|$1\rangle $0
+\left| $1 \right\rangle $0
 endsnippet
 
 
@@ -1636,4 +2131,4 @@ endsnippet
 
 
 
-# vim:ft=snippets
+#
